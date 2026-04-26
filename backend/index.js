@@ -29,7 +29,7 @@ app.use(securityMiddleware);
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["https://zerodha-dashboard-vo3o.onrender.com", "https://zerodha-frontend-h6i8.onrender.com"],
     credentials: true,
   }),
 );

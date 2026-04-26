@@ -34,7 +34,7 @@ const Login = () => {
 
     setLoading(true);
     try {
-      await axios.post("https://zerodha-mdj3.onrender.com/login", formData, {
+      await axios.post("https://zerodha-mdj3.onrender.com/login", formData, {//backend
         withCredentials: true,
       });
 
@@ -47,7 +47,7 @@ const Login = () => {
         showConfirmButton: false,
       }).then(() => {
         // Use navigate to avoid a full page reload on your Mac
-        window.location.href = "http://localhost:3000/";
+        window.location.href = "https://zerodha-dashboard-vo3o.onrender.com";
       });
     } catch (err) {
       setLoading(false);
