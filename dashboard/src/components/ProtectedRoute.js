@@ -23,9 +23,8 @@ const ProtectedRoute = ({ children }) => {
           );
         }
       } catch (err) {
-        console.error("Auth check error:", err);
         // Redirect to frontend login page on error
-        window.location.location(
+        window.location.replace(
           "https://zerodha-frontend-h6i8.onrender.com/login",
         );
       }
@@ -33,7 +32,6 @@ const ProtectedRoute = ({ children }) => {
 
     verifyUser();
     const handlePageShow = (event) => {
-      
       if (event.persisted) {
         verifyUser();
       }
@@ -47,7 +45,18 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (isAuthenticated === null) {
-    return <div className="text-center mt-5">Loading Kite...</div>;
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h3>Verifying Session...</h3>
+      </div>
+    );
   }
 
   return children;
