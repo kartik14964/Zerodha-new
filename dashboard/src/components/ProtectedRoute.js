@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3002/me", {
+        const { data } = await axios.get("https://zerodha-dashboard-vo3o.onrender.com/me", {
           withCredentials: true,
         });
 
@@ -15,12 +15,12 @@ const ProtectedRoute = ({ children }) => {
           setIsAuthenticated(true);
         } else {
           // Redirect to frontend login page
-          window.location.href = "http://localhost:3001/login";
+          window.location.href = "https://zerodha-frontend-h6i8.onrender.com/login";
         }
       } catch (err) {
         console.error("Auth check error:", err);
         // Redirect to frontend login page on error
-        window.location.href = "http://localhost:3001/login";
+        window.location.href = "https://zerodha-frontend-h6i8.onrender.com/login";
       }
     };
 

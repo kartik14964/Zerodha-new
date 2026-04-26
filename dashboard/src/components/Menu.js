@@ -13,7 +13,7 @@ const Menu = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3002/me", {
+        const { data } = await axios.get("https://zerodha-dashboard-vo3o.onrender.com/me", {
           withCredentials: true,
         });
 
@@ -40,11 +40,11 @@ const Menu = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3002/logout",
+        "https://zerodha-dashboard-vo3o.onrender.com/logout",
         {},
         { withCredentials: true },
       );
-      window.location.href = "http://localhost:3001";
+      window.location.href = "https://zerodha-frontend-h6i8.onrender.com";
     } catch (err) {
       alert("Logout failed. Please try again.");
     }
