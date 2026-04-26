@@ -34,7 +34,7 @@ const Login = () => {
 
     setLoading(true);
     try {
-      await axios.post("http://localhost:3002/login", formData, {
+      await axios.post("https://zerodha-mdj3.onrender.com/login", formData, {
         withCredentials: true,
       });
 
