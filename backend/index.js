@@ -9,6 +9,8 @@ const uri = process.env.MONGO_URL;
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 const { HoldingsModel } = require("./model/HoldingsModel");
 const { PositionsModel } = require("./model/PositionsModel");
 const { OrdersModel } = require("./model/OrdersModel");
