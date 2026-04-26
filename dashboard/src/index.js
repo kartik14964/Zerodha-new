@@ -6,14 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-axios.defaults.baseURL = "http://localhost:3002";
+axios.defaults.baseURL = "https://zerodha-mdj3.onrender.com";
 axios.defaults.withCredentials = true;
 
 axios.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      window.location.replace("http://localhost:3001/login");
+      window.location.replace("https://zerodha-frontend-h6i8.onrender.com/login");
     }
     return Promise.reject(err);
   },
