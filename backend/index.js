@@ -23,7 +23,11 @@ const bcrypt = require("bcryptjs");
 //  Middleware
 
 const securityMiddleware = (req, res, next) => {
-  res.set("Cache-Control", "no-store, must-revalidate");
+  res.set({
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+  });
   next();
 };
 
@@ -31,7 +35,10 @@ app.use(securityMiddleware);
 
 app.use(
   cors({
-    origin: ["https://zerodha-dashboard-4kom.onrender.com", "https://zerodha-frontend-h6i8.onrender.com"],
+    origin: [
+      "https://zerodha-dashboard-4kom.onrender.com",
+      "https://zerodha-frontend-h6i8.onrender.com",
+    ],
     credentials: true,
   }),
 );
@@ -46,8 +53,8 @@ app.use(
     store: MongoStore.create({ mongoUrl: uri }),
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      secure: true,      // Required for cross-site cookies
-      httpOnly: true,    // Prevents JS from reading the cookie
+      secure: true, // Required for cross-site cookies
+      httpOnly: true, // Prevents JS from reading the cookie
       sameSite: "none",
     },
   }),

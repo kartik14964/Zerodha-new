@@ -44,7 +44,7 @@ const Menu = () => {
         {},
         { withCredentials: true },
       );
-      window.location.href = "https://zerodha-frontend-h6i8.onrender.com";
+      window.location.replace("https://zerodha-frontend-h6i8.onrender.com");
     } catch (err) {
       alert("Logout failed. Please try again.");
     }
