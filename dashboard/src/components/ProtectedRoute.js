@@ -1,65 +1,45 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const ProtectedRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isChecking, setIsChecking] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const verifyUser = async () => {
+    const checkAuth = async () => {
       try {
-        const { data } = await axios.get(
-          "https://zerodha-mdj3.onrender.com/me",
-          {
-            withCredentials: true,
-          },
-        );
+        const { data } = await axios.get("http://localhost:3002/me", {
+          withCredentials: true,
+        });
 
         if (data.loggedIn) {
-          setIsAuthenticated(true);
+          setIsAuthenticated(true); // Cookie valid, allow access
         } else {
-          // Redirect to frontend login page
-          window.location.replace(
-            "https://zerodha-frontend-h6i8.onrender.com/login",
-          );
+          window.location.href = "http://localhost:3001/";
         }
       } catch (err) {
-        // Redirect to frontend login page on error
-        window.location.replace(
-          "https://zerodha-frontend-h6i8.onrender.com/login",
-        );
+        window.location.href = "http://localhost:3001/";
+      } finally {
+        // Stop the loading spinner whether it succeeded or failed
+        setIsChecking(false);
       }
     };
 
-    verifyUser();
-    const handlePageShow = (event) => {
-      if (event.persisted) {
-        verifyUser();
-      }
-    };
-
-    window.addEventListener("pageshow", handlePageShow);
-
-    return () => {
-      window.removeEventListener("pageshow", handlePageShow);
-    };
+    checkAuth();
   }, []);
 
-  if (isAuthenticated === null) {
+  // Show a loading screen while we wait for the backend to check the cookie
+  if (isChecking) {
     return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <h3>Verifying Session...</h3>
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "20vh" }}>
+        <h2>Loading securely...</h2>
       </div>
     );
   }
 
-  return children;
+  // Only render the actual dashboard if the backend confirmed they are logged in
+  return isAuthenticated ? children : null;
 };
 
 export default ProtectedRoute;
+
