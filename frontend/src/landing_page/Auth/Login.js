@@ -33,21 +33,25 @@ const Login = () => {
     }
 
     setLoading(true);
-    try {
-      await axios.post("https://zerodha-mdj3.onrender.com/login", formData, {//backend
+  try {
+      
+      await axios.post("https://zerodha-mdj3.onrender.com/login", formData, {
         withCredentials: true,
       });
 
-      // Success Notification
+      
       Swal.fire({
         title: "Welcome Back!",
-        text: "Login successful. Redirecting to dashboard...",
+        text: "Login successful. Opening dashboard...", // Updated text
         icon: "success",
         timer: 1500,
         showConfirmButton: false,
       }).then(() => {
-        // Use navigate to avoid a full page reload on your Mac
-        window.location.href = "https://zerodha-dashboard-4kom.onrender.com/";
+        
+
+        window.open("https://zerodha-dashboard-4kom.onrender.com", "_blank"); 
+        window.location.replace("https://zerodha-frontend-cgha.onrender.com/"); 
+        
       });
     } catch (err) {
       setLoading(false);
