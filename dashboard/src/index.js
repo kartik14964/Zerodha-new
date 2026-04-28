@@ -13,7 +13,7 @@ axios.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      window.location.replace("https://zerodha-frontend-h6i8.onrender.com/login");
+      window.location.replace("https://zerodha-frontend-cgha.onrender.com/login");
     }
     return Promise.reject(err);
   },
