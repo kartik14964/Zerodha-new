@@ -1,6 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import Swal from "sweetalert2";
 import "./Auth.css";
 
@@ -10,6 +10,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
+  
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -18,37 +19,48 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = formData;
 
+    // Fast Validation using Swal
     if (!EMAIL_REGEX.test(email)) {
-      return Swal.fire("Invalid Email", "Please enter a valid email address.", "warning");
+      return Swal.fire(
+        "Invalid Email",
+        "Please enter a valid email address.",
+        "warning",
+      );
+    }
+    if (password.length < 1) {
+      return Swal.fire("Missing Password", "Password is required.", "warning");
     }
 
     setLoading(true);
     try {
-      await axios.post("https://zerodha-mdj3.onrender.com/login", formData, {
+      await axios.post("https://zerodha-mdj3.onrender.com/login", formData, {//backend
         withCredentials: true,
       });
 
+      // Success Notification
       Swal.fire({
         title: "Welcome Back!",
-        text: "Login successful. Redirecting to your dashboard...",
+        text: "Login successful. Redirecting to dashboard...",
         icon: "success",
-        timer: 1200,
+        timer: 1500,
         showConfirmButton: false,
       }).then(() => {
-        
-        window.location.replace("https://zerodha-dashboard-4kom.onrender.com");
+        // Use navigate to avoid a full page reload on your Mac
+        window.location.href = "https://zerodha-frontend-cgha.onrender.com/";
       });
-      
     } catch (err) {
       setLoading(false);
       Swal.fire({
         title: "Login Failed",
-        text: err.response?.data?.message || "Invalid credentials.",
+        text:
+          err.response?.data?.message ||
+          "Invalid credentials. Please try again.",
         icon: "error",
         confirmButtonColor: "#df514c",
       });
     }
   };
+
   return (
     <div className="kite-landing-container">
       <div className="kite-landing-content">
@@ -63,7 +75,7 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="email"
-              name="email"
+              name="email" 
               placeholder="Email address"
               className="kite-input-field"
               value={formData.email}
@@ -72,7 +84,7 @@ const Login = () => {
             />
             <input
               type="password"
-              name="password"
+              name="password" 
               placeholder="Password"
               className="kite-input-field"
               value={formData.password}
