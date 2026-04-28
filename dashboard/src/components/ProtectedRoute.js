@@ -1,53 +1,54 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const ProtectedRoute = ({ children }) => {
-  const [isChecking, setIsChecking] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authState, setAuthState] = useState("PENDING");
 
-  
-  const loginFrontendUrl = "https://zerodha-frontend-cgha.onrender.com/login"; 
-
-  const checkAuth = useCallback(async () => {
-    setIsChecking(true); 
-    try {
-      const { data } = await axios.get("https://zerodha-mdj3.onrender.com/me", {
-        withCredentials: true, 
-      });
-
-      if (data.loggedIn) {
-        setIsAuthenticated(true);
-        setIsChecking(false);
-      } else {
-        window.location.replace(loginFrontendUrl); 
-      }
-    } catch (err) {
-      window.location.replace(loginFrontendUrl);
-    }
-  }, []);
+  const loginUrl = "https://zerodha-frontend-cgha.onrender.com/login";
 
   useEffect(() => {
-    checkAuth();
+    const checkAuth = async () => {
+      try {
+        const { data } = await axios.get("https://zerodha-mdj3.onrender.com/me", {
+          withCredentials: true,
+        });
 
-    const handlePageShow = (event) => {
-      if (event.persisted) {
-        checkAuth(); 
+        if (data.loggedIn) {
+          setAuthState("LOGGED_IN");
+        } else {
+          setAuthState("LOGGED_OUT");
+          window.location.replace(loginUrl);
+        }
+      } catch (err) {
+        setAuthState("LOGGED_OUT");
+        window.location.replace(loginUrl);
       }
     };
 
-    window.addEventListener("pageshow", handlePageShow);
-    return () => window.removeEventListener("pageshow", handlePageShow);
-  }, [checkAuth]);
+    checkAuth();
+  }, []);
 
-  if (isChecking) {
+  if (authState === "PENDING") {
     return (
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "20vh" }}>
-        <h2>Loading securely...</h2>
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#fff",
+        }}
+      >
+        <img
+          src="/media/images/logo.svg"
+          alt="Loading..."
+          style={{ width: "50px" }}
+        />
       </div>
     );
   }
 
-  return isAuthenticated ? children : null;
+  return authState === "LOGGED_IN" ? children : null;
 };
 
 export default ProtectedRoute;
