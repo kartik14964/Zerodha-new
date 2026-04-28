@@ -19,17 +19,8 @@ const Login = () => {
     const { email, password } = formData;
 
     if (!EMAIL_REGEX.test(email)) {
-      return Swal.fire(
-        "Invalid Email",
-        "Please enter a valid email address.",
-        "warning",
-      );
+      return Swal.fire("Invalid Email", "Please enter a valid email address.", "warning");
     }
-    if (password.length < 1) {
-      return Swal.fire("Missing Password", "Password is required.", "warning");
-    }
-
-    const newTab = window.open("about:blank", "_blank");
 
     setLoading(true);
     try {
@@ -37,35 +28,27 @@ const Login = () => {
         withCredentials: true,
       });
 
-      if (newTab) {
-        newTab.location.href = "http://localhost:3000";
-      }
-
       Swal.fire({
         title: "Welcome Back!",
-        text: "Login successful. Opening dashboard...",
+        text: "Login successful. Redirecting to your dashboard...",
         icon: "success",
-        timer: 1500,
+        timer: 1200,
         showConfirmButton: false,
       }).then(() => {
-        window.location.replace("https://zerodha-frontend-cgha.onrender.com/");
+        
+        window.location.replace("https://zerodha-dashboard-4kom.onrender.com");
       });
+      
     } catch (err) {
       setLoading(false);
-
-      if (newTab) newTab.close();
-
       Swal.fire({
         title: "Login Failed",
-        text:
-          err.response?.data?.message ||
-          "Invalid credentials. Please try again.",
+        text: err.response?.data?.message || "Invalid credentials.",
         icon: "error",
         confirmButtonColor: "#df514c",
       });
     }
   };
-
   return (
     <div className="kite-landing-container">
       <div className="kite-landing-content">
