@@ -1,54 +1,56 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const ProtectedRoute = ({ children }) => {
-  const [authState, setAuthState] = useState("PENDING");
-
-  const loginUrl = "https://zerodha-frontend-cgha.onrender.com/login";
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const verifyUser = async () => {
       try {
         const { data } = await axios.get("https://zerodha-mdj3.onrender.com/me", {
           withCredentials: true,
         });
 
         if (data.loggedIn) {
-          setAuthState("LOGGED_IN");
+          setIsAuthenticated(true);
         } else {
-          setAuthState("LOGGED_OUT");
-          window.location.replace(loginUrl);
+          window.location.replace("https://zerodha-frontend-cgha.onrender.com/login");
         }
       } catch (err) {
-        setAuthState("LOGGED_OUT");
-        window.location.replace(loginUrl);
+        window.location.replace("https://zerodha-frontend-cgha.onrender.com/login");
       }
     };
 
-    checkAuth();
+    verifyUser();
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        verifyUser();
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+    };
   }, []);
 
-  if (authState === "PENDING") {
+  if (isAuthenticated === null) {
     return (
       <div
         style={{
           height: "100vh",
           display: "flex",
-          alignItems: "center",
           justifyContent: "center",
-          background: "#fff",
+          alignItems: "center",
         }}
       >
-        <img
-          src="/media/images/logo.svg"
-          alt="Loading..."
-          style={{ width: "50px" }}
-        />
+        <h3>Verifying Session...</h3>
       </div>
     );
   }
 
-  return authState === "LOGGED_IN" ? children : null;
+  return children;
 };
 
 export default ProtectedRoute;
