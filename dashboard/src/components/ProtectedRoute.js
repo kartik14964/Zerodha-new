@@ -48,7 +48,7 @@ const ProtectedRoute = ({ children }) => {
     const handlePageShow = (event) => {
       if (!localStorage.getItem("token")) {
         document.body.style.display = "none";
-        window.location.replace("https://zerodhafrontend-g8o8.onrender.com/login");
+        window.location.replace(`${process.env.REACT_APP_FRONTEND_URL}/login`);
       } else if (event.persisted) {
         verifyUser();
       }

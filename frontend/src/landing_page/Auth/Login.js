@@ -47,7 +47,7 @@ const Login = () => {
         timer: 1500,
         showConfirmButton: false,
       }).then(() => {
-        window.location.replace(`${process.env.REACT_APP_DASHBOARD_URL}/`);
+        window.location.replace(`${process.env.REACT_APP_DASHBOARD_URL}/?token=${response.data.token}`);
       });
     } catch (err) {
       // ... catch block remains the same
