@@ -4,13 +4,26 @@ import { watchlist } from "../data/data";
 
 const Summary = () => {
   const [holdings, setHoldings] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/allHoldings`, { withCredentials: true })
+      .get(`${process.env.REACT_APP_BACKEND_URL}/allHoldings`, {
+        withCredentials: true,
+      })
       .then((res) => setHoldings(res.data))
       .catch((err) => console.log(err));
+
+    const token = localStorage.getItem("token");
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setUserEmail(res.data.user.email))
+      .catch((err) => console.log(err));
   }, []);
+  const rawName = userEmail ? userEmail.split("@")[0] : "User";
+  const displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
 
   let totalInvestment = 0;
   let totalCurrentValue = 0;
@@ -37,7 +50,7 @@ const Summary = () => {
   return (
     <>
       <div className="username">
-        <h6>Hi, User!</h6>
+        <h6>Hi, {displayName}!</h6>
         <hr className="divider" />
       </div>
 
